@@ -6,6 +6,7 @@
 package view;
 
 import controller.ProfessorController;
+import controller.TMCadProfessor;
 import model.Professor;
 import javax.swing.JOptionPane;
 import model.exceptions.ProfessorException;
@@ -29,7 +30,8 @@ public class FrProfessor extends javax.swing.JDialog {
         this.habilitarCampos(false);
         this.limparCampos();
 
-        edtListagem.setText(profController.imprimirListaProfessores());
+        //edtListagem.setText(profController.imprimirListaProfessores());
+       profController.atualizarTabela(grdProfessor);
     }
 
     public void habilitarCampos(boolean flag) {
@@ -77,7 +79,7 @@ public class FrProfessor extends javax.swing.JDialog {
         lblNome2 = new javax.swing.JLabel();
         edtCPF = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        grdProfessor = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -134,18 +136,18 @@ public class FrProfessor extends javax.swing.JDialog {
 
         lblNome2.setText("CPF:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        grdProfessor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(grdProfessor);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -235,7 +237,8 @@ public class FrProfessor extends javax.swing.JDialog {
                 profController.cadastrarProfessor(edtNome.getText(), edtSexo.getText(), edtIdade.getText(), edtCPF.getText());
             }
 
-            edtListagem.setText(profController.imprimirListaProfessores());
+            //edtListagem.setText(profController.imprimirListaProfessores());
+            profController.atualizarTabela(grdProfessor);
             this.habilitarCampos(false);
             this.limparCampos();
         } catch (ProfessorException e) {
@@ -254,7 +257,7 @@ public class FrProfessor extends javax.swing.JDialog {
         try {
             profController.excluirProfessor(cpfEscolhido);
             
-            edtListagem.setText(profController.imprimirListaProfessores());
+            //edtListagem.setText(profController.imprimirListaProfessores());
             JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
         } catch (ProfessorException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -275,6 +278,8 @@ public class FrProfessor extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    // Criado Pelo Superbi
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -286,8 +291,8 @@ public class FrProfessor extends javax.swing.JDialog {
     private javax.swing.JTextField edtIdade;
     private javax.swing.JTextField edtNome;
     private javax.swing.JTextField edtSexo;
+    private javax.swing.JTable grdProfessor;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblNome1;
     private javax.swing.JLabel lblNome2;

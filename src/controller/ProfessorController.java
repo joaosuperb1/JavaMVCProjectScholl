@@ -6,6 +6,7 @@
 package controller;
 
 import java.util.List;
+import javax.swing.JTable;
 import model.Professor;
 import model.dao.ProfessorDAO;
 import model.exceptions.ProfessorException;
@@ -17,7 +18,7 @@ import model.exceptions.ProfessorException;
 public class ProfessorController {
 
     private ProfessorDAO repositorio;
-    //List<Professor> lista; //enquanto nao usamos bd ou arquivo
+    List<Professor> lista;
 
     public ProfessorController() {
         repositorio = new ProfessorDAO();
@@ -93,5 +94,7 @@ public class ProfessorController {
         
         return p;
     }
-
+    public void atualizarTabela(JTable grd) {
+        Util.jTableShow(grd, new TMCadProfessor(repositorio.findAll()), null);
+    }
 }
