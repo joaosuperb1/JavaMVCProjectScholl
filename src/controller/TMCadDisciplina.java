@@ -85,4 +85,10 @@ public class TMCadDisciplina extends AbstractTableModel {
     public Class<?> getColumnClass(int columnIndex) {
         return String.class; // Tipo de dados exibidos na tabela
     }
+    
+    public void atualizarTabela(List<Disciplina> novasDisciplinas) {
+        this.lista = novasDisciplinas;
+        fireTableDataChanged(); // Notifica a tabela que os dados mudaram
+    }
+    
 }
