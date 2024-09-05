@@ -10,5 +10,3 @@ Projetinho do seu zé
 	- Usa Herança
 	- Salva em arquivo de texto
 	- Usa MVC
-
-
