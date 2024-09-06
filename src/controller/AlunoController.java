@@ -53,6 +53,7 @@ public class AlunoController {
         Aluno aluno = repositorio.findByMatricula(matricula);
         if (aluno != null) {
             repositorio.delete(aluno);
+            
         } else {
             throw new AlunoException("Error - Aluno inexistente.");
         }
