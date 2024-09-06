@@ -16,67 +16,69 @@ import model.exceptions.DisciplinaException;
 
 public class DisciplinaController {
 
-    private final DisciplinaDAO repositorio;
+    private DisciplinaDAO repositorio;
 
     public DisciplinaController() {
-        this.repositorio = new DisciplinaDAO();
+        this.repositorio = new DisciplinaDAO(); // Inicializa o DAO
     }
 
     public boolean cadastrarDisciplina(String nome, int semestre, String horario, int codigoDisciplina, String CPFProfessor) {
-        Disciplina novaDisciplina = validarDisciplina(nome, semestre, horario, codigoDisciplina, CPFProfessor);
+        Disciplina novaDisciplina = validacaoVazio(nome, semestre, horario, codigoDisciplina, );
 
         if (repositorio.findByNome(nome) == null) {
-            return repositorio.save(novaDisciplina);
+            return repositorio.save(novaDisciplina); // Cadastra nova disciplina se não houver duplicidade
         } else {
             throw new DisciplinaException("Error - Já existe uma disciplina com este 'Nome'.");
         }
     }
 
     public void atualizarDisciplina(String nomeOriginal, String nome, int semestre, String horario) {
-        Disciplina disciplinaAtualizada = validarDisciplina(nome, semestre, horario);
-        repositorio.update(nomeOriginal, disciplinaAtualizada);
+        Disciplina disciplinaAtualizada = validacaoVazio(nome, semestre, horario);
+        repositorio.update(nomeOriginal, disciplinaAtualizada); // Atualiza a disciplina
     }
 
     public Disciplina buscarDisciplina(String nome) {
-        return repositorio.findByNome(nome);
+        return this.repositorio.findByNome(nome); // Busca disciplina pelo nome
     }
 
     public List<Disciplina> listarDisciplinas() {
-        return repositorio.findAll();
+        return this.repositorio.findAll(); // Lista todas as disciplinas
     }
 
     public void excluirDisciplina(String nome) {
         Disciplina disc = repositorio.findByNome(nome);
         if (disc != null) {
-            repositorio.delete(disc);
+            repositorio.delete(disc); // Exclui a disciplina se ela existir
         } else {
             throw new DisciplinaException("Error - Disciplina inexistente.");
         }
     }
 
-    private Disciplina validarDisciplina(String nome, int semestre, String horario) {
+    private Disciplina validacaoVazio(String nome, int semestre, String horario) {
+        Disciplina d = new Disciplina();
+
         if (nome.isEmpty()) {
             throw new DisciplinaException("Error - Campo vazio: 'nome'.");
         }
+        d.setNome(nome);
+
         if (semestre <= 0) {
             throw new DisciplinaException("Error - Semestre inválido.");
         }
+        d.setSemestre(semestre);
+
         if (horario.isEmpty()) {
             throw new DisciplinaException("Error - Campo vazio: 'horário'.");
         }
+        d.setHorario(horario);
 
-        return new Disciplina(nome, semestre, horario, ministrante, codigoDisciplina);
+        return d;
     }
-
-    private Disciplina validarDisciplina(String nome, int semestre, String horario, int codigoDisciplina, String CPFProfessor) {
-        Disciplina disciplina = validarDisciplina(nome, semestre, horario);
-        disciplina.setCodigoDisciplina(codigoDisciplina);
-        disciplina.setCPFProfessor(CPFProfessor);
-        return disciplina;
-    }
-
+    
     public void atualizarTabela(JTable grd) {
+        // Utilize o Util.jTableShow para atualizar a tabela com o novo TMCadDisciplina
         Util.jTableShow(grd, new TMCadDisciplina(repositorio.findAll()), null);
     }
+    
 }
 
