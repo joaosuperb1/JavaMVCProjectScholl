@@ -96,6 +96,9 @@ public class FrHome extends javax.swing.JFrame {
 
     private void btnCadDisciplinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadDisciplinaActionPerformed
         // TODO add your handling code here:
+        FrDisciplina dlgCadDisciplina = new FrDisciplina(this, true);
+        dlgCadDisciplina.setLocationRelativeTo(this);
+        dlgCadDisciplina.setVisible(true);
     }//GEN-LAST:event_btnCadDisciplinaActionPerformed
 
     private void btnCadAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadAlunoActionPerformed

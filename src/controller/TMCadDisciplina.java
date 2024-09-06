@@ -21,7 +21,8 @@ public class TMCadDisciplina extends AbstractTableModel {
     private final int COL_NOME = 0;
     private final int COL_SEMESTRE = 1;
     private final int COL_HORARIO = 2;
-    private final int COL_MINISTRANTE = 3;
+    private final int COL_CODIGO = 3;
+    private final int COL_MINISTRANTE = 4;
 
     public TMCadDisciplina(List<Disciplina> lstDisciplinas) {
         lista = lstDisciplinas;
@@ -52,6 +53,8 @@ public class TMCadDisciplina extends AbstractTableModel {
                     return aux.getSemestre();
                 case COL_HORARIO:
                     return aux.getHorario();
+                case COL_CODIGO:
+                    return aux.getHorario();
                 case COL_MINISTRANTE:
                     return aux.getMinistrante().getNome();
                 default:
@@ -74,6 +77,8 @@ public class TMCadDisciplina extends AbstractTableModel {
                 return "Semestre";
             case COL_HORARIO:
                 return "Horário";
+            case COL_CODIGO:
+                return "Código";
             case COL_MINISTRANTE:
                 return "Ministrante";
             default:
@@ -86,9 +91,9 @@ public class TMCadDisciplina extends AbstractTableModel {
         return String.class; // Tipo de dados exibidos na tabela
     }
     
+    
     public void atualizarTabela(List<Disciplina> novasDisciplinas) {
         this.lista = novasDisciplinas;
         fireTableDataChanged(); // Notifica a tabela que os dados mudaram
     }
-    
 }

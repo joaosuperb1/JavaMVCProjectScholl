@@ -9,69 +9,74 @@ package controller;
  * @author joaos
  */
 import java.util.List;
+import javax.swing.JTable;
 import model.Disciplina;
 import model.dao.DisciplinaDAO;
 import model.exceptions.DisciplinaException;
 
 public class DisciplinaController {
 
-    private DisciplinaDAO repositorio;
+    private final DisciplinaDAO repositorio;
 
     public DisciplinaController() {
-        this.repositorio = new DisciplinaDAO(); // Inicializa o DAO
+        this.repositorio = new DisciplinaDAO();
     }
 
-    public boolean cadastrarDisciplina(String nome, int semestre, String horario) {
-        Disciplina novaDisciplina = validacaoVazio(nome, semestre, horario);
+    public boolean cadastrarDisciplina(String nome, int semestre, String horario, int codigoDisciplina, String CPFProfessor) {
+        Disciplina novaDisciplina = validarDisciplina(nome, semestre, horario, codigoDisciplina, CPFProfessor);
 
         if (repositorio.findByNome(nome) == null) {
-            return repositorio.save(novaDisciplina); // Cadastra nova disciplina se não houver duplicidade
+            return repositorio.save(novaDisciplina);
         } else {
             throw new DisciplinaException("Error - Já existe uma disciplina com este 'Nome'.");
         }
     }
 
     public void atualizarDisciplina(String nomeOriginal, String nome, int semestre, String horario) {
-        Disciplina disciplinaAtualizada = validacaoVazio(nome, semestre, horario);
-        repositorio.update(nomeOriginal, disciplinaAtualizada); // Atualiza a disciplina
+        Disciplina disciplinaAtualizada = validarDisciplina(nome, semestre, horario);
+        repositorio.update(nomeOriginal, disciplinaAtualizada);
     }
 
     public Disciplina buscarDisciplina(String nome) {
-        return this.repositorio.findByNome(nome); // Busca disciplina pelo nome
+        return repositorio.findByNome(nome);
     }
 
     public List<Disciplina> listarDisciplinas() {
-        return this.repositorio.findAll(); // Lista todas as disciplinas
+        return repositorio.findAll();
     }
 
     public void excluirDisciplina(String nome) {
         Disciplina disc = repositorio.findByNome(nome);
         if (disc != null) {
-            repositorio.delete(disc); // Exclui a disciplina se ela existir
+            repositorio.delete(disc);
         } else {
             throw new DisciplinaException("Error - Disciplina inexistente.");
         }
     }
 
-    private Disciplina validacaoVazio(String nome, int semestre, String horario) {
-        Disciplina d = new Disciplina();
-
+    private Disciplina validarDisciplina(String nome, int semestre, String horario) {
         if (nome.isEmpty()) {
             throw new DisciplinaException("Error - Campo vazio: 'nome'.");
         }
-        d.setNome(nome);
-
         if (semestre <= 0) {
             throw new DisciplinaException("Error - Semestre inválido.");
         }
-        d.setSemestre(semestre);
-
         if (horario.isEmpty()) {
             throw new DisciplinaException("Error - Campo vazio: 'horário'.");
         }
-        d.setHorario(horario);
 
-        return d;
+        return new Disciplina(nome, semestre, horario, ministrante, codigoDisciplina);
+    }
+
+    private Disciplina validarDisciplina(String nome, int semestre, String horario, int codigoDisciplina, String CPFProfessor) {
+        Disciplina disciplina = validarDisciplina(nome, semestre, horario);
+        disciplina.setCodigoDisciplina(codigoDisciplina);
+        disciplina.setCPFProfessor(CPFProfessor);
+        return disciplina;
+    }
+
+    public void atualizarTabela(JTable grd) {
+        Util.jTableShow(grd, new TMCadDisciplina(repositorio.findAll()), null);
     }
 }
 

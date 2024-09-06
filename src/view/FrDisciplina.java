@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
-import model.Aluno;
+import model.Disciplina;
 import model.exceptions.ProfessorException;
 
 /**
@@ -21,17 +21,16 @@ import model.exceptions.ProfessorException;
 public class FrDisciplina extends javax.swing.JDialog {
 
     DisciplinaController disciplinaController;
-    String matriculaAlunoEditando;
+    int codigoDisciplinaEditando;
 
     public FrDisciplina(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         
         disciplinaController = new DisciplinaController();
-        matriculaAlunoEditando = "-";
+        codigoDisciplinaEditando = 0;
 
         initComponents();
         this.addMaskOnFields();
-        
         this.habilitarCampos(false);
         this.limparCampos();
 
@@ -50,6 +49,8 @@ public class FrDisciplina extends javax.swing.JDialog {
         edtSemestre.setText("");
         edtHorario.setText("");
         fEdtMatricula.setText("");
+        edtCOD.setText("");
+       
     }
     
     public void addMaskOnFields(){
@@ -71,12 +72,12 @@ public class FrDisciplina extends javax.swing.JDialog {
      *
      * @param a
      */
-    public void objetoParaCampos(Aluno a) {
+    public void objetoParaCampos(Disciplina a) {
         edtNome.setText(a.getNome());
-        edtSemestre.setText(a.getSexo() + "");
-        edtHorario.setText(a.getIdade() + "");
-        fEdtMatricula.setText(a.getMatricula());
-        edtAno.setText(a.getAnoIngresso() + "");
+        edtSemestre.setText(String.valueOf(a.getSemestre())); // Converte o semestre para String
+        edtHorario.setText(a.getHorario());
+        fEdtMatricula.setText(a.getMinistrante().getCpf()); // Pega o nome do professor
+        edtCOD.setText(codigoDisciplinaEditando);
     }
 
     /**
@@ -103,6 +104,8 @@ public class FrDisciplina extends javax.swing.JDialog {
         lblSexo = new javax.swing.JLabel();
         edtSemestre = new javax.swing.JTextField();
         fEdtMatricula = new javax.swing.JFormattedTextField();
+        jLabel1 = new javax.swing.JLabel();
+        edtCOD = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         grdDisciplinas = new javax.swing.JTable();
 
@@ -167,30 +170,36 @@ public class FrDisciplina extends javax.swing.JDialog {
 
         lblSexo.setText("Semestre");
 
+        jLabel1.setText("COD");
+
         javax.swing.GroupLayout panFormularioLayout = new javax.swing.GroupLayout(panFormulario);
         panFormulario.setLayout(panFormularioLayout);
         panFormularioLayout.setHorizontalGroup(
             panFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panFormularioLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(panFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFormularioLayout.createSequentialGroup()
+                .addGroup(panFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(panFormularioLayout.createSequentialGroup()
                         .addComponent(lblNome1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(edtHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(lblNome2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fEdtMatricula))
+                        .addComponent(fEdtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panFormularioLayout.createSequentialGroup()
                         .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(edtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
+                        .addComponent(edtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblSexo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(edtSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(67, Short.MAX_VALUE))
+                        .addComponent(edtSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(edtCOD, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         panFormularioLayout.setVerticalGroup(
             panFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,7 +209,9 @@ public class FrDisciplina extends javax.swing.JDialog {
                     .addComponent(lblNome)
                     .addComponent(edtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSexo)
-                    .addComponent(edtSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(edtCOD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNome1)
@@ -273,16 +284,16 @@ public class FrDisciplina extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            if (!matriculaAlunoEditando.equals("-")) {
-                disciplinaController.atualizarAluno(matriculaAlunoEditando, edtNome.getText(), edtSemestre.getText(), edtHorario.getText(), fEdtMatricula.getText(), edtAno.getText());
+            if (!codigoDisciplinaEditando.equals("-")) {
+                disciplinaController.atualizarDisciplina(codigoDisciplinaEditando, edtNome.getText(), Integer.parseInt(edtSemestre.getText()), edtHorario.getText(), fEdtMatricula.getText() );
             } else {
-                disciplinaController.cadastrarAluno(edtNome.getText(), edtSemestre.getText(), edtHorario.getText(), fEdtMatricula.getText(), edtAno.getText());
+                disciplinaController.cadastrarDisciplina(edtNome.getText(), Integer.parseInt(edtSemestre.getText()), edtHorario.getText(), fEdtMatricula.getText() );
             }
 
             disciplinaController.atualizarTabela(grdDisciplinas);
             this.habilitarCampos(false);
             this.limparCampos();
-        } catch (ProfessorException e) {
+        } catch (ProfessorException e) {\
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -294,13 +305,13 @@ public class FrDisciplina extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        Aluno alunoEditando = (Aluno) this.getObjectSelectOnGrid();
+        Disciplina disciplinaEditando = (Disciplina) this.getObjectSelectOnGrid();
 
-        if (alunoEditando == null)
+        if (disciplinaEditando == null)
             JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             try {
-                disciplinaController.excluirAluno(alunoEditando.getMatricula());
+                disciplinaController.excluirDisciplina(disciplinaEditando.getNome());
 
                 disciplinaController.atualizarTabela(grdDisciplinas);
                 JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
@@ -311,15 +322,15 @@ public class FrDisciplina extends javax.swing.JDialog {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        Aluno alunoEditando = (Aluno) this.getObjectSelectOnGrid();
+        Disciplina disciplinaEditando = (Disciplina) this.getObjectSelectOnGrid();
 
-        if (alunoEditando == null)
+        if (disciplinaEditando == null)
             JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             this.limparCampos();
             this.habilitarCampos(true);
-            this.objetoParaCampos(alunoEditando);
-            this.matriculaAlunoEditando = alunoEditando.getMatricula();
+            this.objetoParaCampos(disciplinaEditando);
+            this.codigoDisciplinaEditando = disciplinaEditando.getCodigoDisciplina();
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -351,11 +362,13 @@ public class FrDisciplina extends javax.swing.JDialog {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JTextField edtCOD;
     private javax.swing.JTextField edtHorario;
     private javax.swing.JTextField edtNome;
     private javax.swing.JTextField edtSemestre;
     private javax.swing.JFormattedTextField fEdtMatricula;
     private javax.swing.JTable grdDisciplinas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblNome1;
